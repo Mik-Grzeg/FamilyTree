@@ -1,0 +1,41 @@
+#+STARTUP: showall
+#+TODO: TODO IN-PROGRESS WAITING DONE
+
+* Family Tree IO Project
+A feature-rich web application that +is+ will be designed for creating family trees. +User-friendly ui design with many functionalities+.
+** Technologies
+*** Frontend
++ React.js
++ Typescript
++ Styled Components
++ libraries
+  - [React-family-tree](https://www.npmjs.com/package/react-family-tree)
+  - react-toastify
+  - axios
+*** Backend in Rust
++ Actix-web
+*** Database
++ Postgresql
+*** Infrastructure
++ Docker
++ k8s
+*** Testing
++ Units
+  - Rust
+  - React testing library
++ Integration
+  - Pytest
++ e2e
+  - cypress
+** TODO
++ visualization
++ dragging elements
++ multimedia attachments (mostly images)
++ recognizing different relations between indiviuals
++ time frame of the relationship
++ biographical informations
++ a posibility to export the tree to HTML, PDF
++ read/write the tree from/to json
++ multitenant architecture
++ persistent trees, with the help of a database
++ user authentication service

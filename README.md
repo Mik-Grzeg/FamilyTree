@@ -1,30 +1,30 @@
 
 # Table of Contents
 
-1.  [Family Tree IO Project](#orgd16918a)
-    1.  [Technologies](#org3354296)
-        1.  [Frontend](#orgcb9818d)
-        2.  [Backend in Rust](#orgb4915c4)
-        3.  [Database](#org892ded0)
-        4.  [Infrastructure](#org2c9e6e5)
-        5.  [Testing](#org81ee0a9)
-    2.  [Features](#org4a6412d)
+1.  [Family Tree IO Project](#org193cfad)
+    1.  [Technologies](#org3c00da8)
+        1.  [Frontend](#orgf21d4f2)
+        2.  [Backend in Rust](#org3adbffe)
+        3.  [Database](#org0e1314a)
+        4.  [Infrastructure](#org2a18421)
+        5.  [Testing](#org123a108)
+    2.  [TODO](#orgba6d6dd)
 
 
 
-<a id="orgd16918a"></a>
+<a id="org193cfad"></a>
 
 # Family Tree IO Project
 
 A feature-rich web application that <del>is</del> will be designed for creating family trees. <del>User-friendly ui design with many functionalities</del>.
 
 
-<a id="org3354296"></a>
+<a id="org3c00da8"></a>
 
 ## Technologies
 
 
-<a id="orgcb9818d"></a>
+<a id="orgf21d4f2"></a>
 
 ### Frontend
 
@@ -37,21 +37,21 @@ A feature-rich web application that <del>is</del> will be designed for creating 
     -   axios
 
 
-<a id="orgb4915c4"></a>
+<a id="org3adbffe"></a>
 
 ### Backend in Rust
 
 -   Actix-web
 
 
-<a id="org892ded0"></a>
+<a id="org0e1314a"></a>
 
 ### Database
 
--   Mongodb
+-   Postgresql
 
 
-<a id="org2c9e6e5"></a>
+<a id="org2a18421"></a>
 
 ### Infrastructure
 
@@ -59,7 +59,7 @@ A feature-rich web application that <del>is</del> will be designed for creating 
 -   k8s
 
 
-<a id="org81ee0a9"></a>
+<a id="org123a108"></a>
 
 ### Testing
 
@@ -72,9 +72,9 @@ A feature-rich web application that <del>is</del> will be designed for creating 
     -   cypress
 
 
-<a id="org4a6412d"></a>
+<a id="orgba6d6dd"></a>
 
-## TODO Features
+## TODO
 
 -   visualization
 -   dragging elements
@@ -86,4 +86,5 @@ A feature-rich web application that <del>is</del> will be designed for creating 
 -   read/write the tree from/to json
 -   multitenant architecture
 -   persistent trees, with the help of a database
+-   user authentication service
 
