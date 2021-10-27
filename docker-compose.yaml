@@ -1,4 +1,4 @@
-version: "3.9"
+version: "3.8"
 services:
   postgres:
     image: postgres:14-alpine
@@ -29,3 +29,11 @@ services:
     restart: always
     ports:
       - 5000:5000
+  frontend:
+    build:
+      context: ./frontend
+    environment:
+      PORT_FRONTEND: 3000
+    restart: always
+    ports:
+      - 3000:3000
