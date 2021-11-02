@@ -29,7 +29,7 @@ jobs:
         --target builder \
         --cache-from $CACHE_IMAGE:builder \
         --tag $CACHE_IMAGE-builder:1.0.0 \
-        --file fam_tree_rest_api/Dockerfile \
+        --file Dockerfile \
         --build-arg BUILDKIT_INLINE_CACHE=1 \
         "."
     - name: Build images
