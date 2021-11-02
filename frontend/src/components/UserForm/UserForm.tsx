@@ -60,7 +60,7 @@ const UserForm: FunctionComponent = () => {
         </UserFormButton>
       </UserFormBttns>
       <MainFormWrapper onSubmit={handleSubmit(onSubmit)}>
-        <MainFormInside>
+        <MainFormInside aria-label="user-form">
           <Input
             label="Username"
             register={register("username", {
