@@ -1,0 +1,39 @@
+name: Docker Build
+
+on: [push]
+
+env:
+  CACHE_IMAGE: famtree.azurecr.io/family-tree
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+
+
+jobs:
+
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Authenticate acr
+      run: docker login -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASS }}
+    - name: Build builder from dockerfile
+      run: |
+        docker build \
+        --target builder \
+        --cache-from $CACHE_IMAGE:builder \
+        --tag $CACHE_IMAGE-builder:1.0.0 \
+        --file fam_tree_rest_api/Dockerfile \
+        --build-arg BUILDKIT_INLINE_CACHE=1 \
+        "."
+    - name: Build images
+      run: docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml build --build-arg BUILDKIT_INLINE_CACHE=1
+    - name: Push builder image to acr
+      run: docker push $CACHE_IMAGE-builder:1.0.0
+    - name: Push migrator image to acr
+      run: docker push $CACHE_IMAGE-migrator:1.0.0
+    - name: Push tree-api image to acr
+      run: docker push $CACHE_IMAGE-tree_api:1.0.0
+    - name: Push frontend image to acr
+      run: docker push $CACHE_IMAGE-frontend:1.0.0
