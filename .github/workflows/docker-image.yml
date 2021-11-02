@@ -23,6 +23,7 @@ jobs:
         username: ${{ secrets.REGISTRY_USER }}
         password: ${{ secrets.REGISTRY_PASS }}
     - name: Build builder from dockerfile
+      working-directory: ./fam_tree_rest_api
       run: |
         docker build \
         --target builder \
