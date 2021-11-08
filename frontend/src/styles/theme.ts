@@ -15,11 +15,13 @@ const theme = {
   },
   colors: {
     bg: "var(--dark-purple)",
+    errorRed: "var(--dark-red)",
     text: {
       error: "var(--black)",
       dark: "var(--dark-blue)",
       light: "var(--white)",
       placeholder: "var(--med-blue)",
+      highlited: "var(--dark-turqoise)",
     },
     bgbar: {
       dark: "var(--med-blue)",

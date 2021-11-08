@@ -20,10 +20,12 @@ import {
   PASSWD_MIN_LENGTH,
   PASSWD_MIN_LENGTH_MSSG,
 } from "utils/userForm.consts";
+import PrivacyPolicyCheckbox from "./PrivacyPolicyCheckbox";
 
 type Inputs = {
   username: string;
   password: string;
+  privacyPolicy?: boolean;
 };
 
 const UserForm: FunctionComponent = () => {
@@ -92,6 +94,12 @@ const UserForm: FunctionComponent = () => {
             errorMssg={errors.password?.message}
             type="password"
           />
+          {active === 1 && (
+            <PrivacyPolicyCheckbox
+              isError={!!errors.privacyPolicy}
+              register={register("privacyPolicy", { required: true })}
+            />
+          )}
           <Button type="submit">{active === 0 ? "Log in" : "Register"}</Button>
         </MainFormInside>
       </MainFormWrapper>

@@ -72,4 +72,6 @@ export const InputError = styled.div`
   font-size: ${({ theme }) => theme.fonts.sizes.s};
 
   margin-top: 8px;
+
+  height: 18px;
 `;
