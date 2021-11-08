@@ -47,6 +47,13 @@ const theme = {
       bg: "var(--red)",
       hoveredBg: "var(--dark-red)",
     },
+    modal: {
+      bg: {
+        male: "var(--turqoise)",
+        female: "var(--red)",
+        default: "var(--med-blue)",
+      },
+    },
   },
   heights: {
     header: "var(--header-height)",

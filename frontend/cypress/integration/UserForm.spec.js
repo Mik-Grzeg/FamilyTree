@@ -66,4 +66,45 @@ describe("Main page (when not logged in)", () => {
 
     allFormInputErrors(true);
   });
+
+  describe("Register form", () => {
+    it("has default color checkbox", () => {
+      cy.findByRole("button", { name: /register/i }).click();
+
+      cy.findByRole("form").within(() => {
+        cy.findByRole("checkbox")
+          .prev()
+          .should("have.css", "background-color", "rgb(62, 92, 118)");
+      });
+    });
+
+    it("highlites the privacy policy checkbox if it wasn't active when form submitted", () => {
+      cy.findByRole("form").within(() => {
+        cy.findByRole("button", { name: /register/i }).click();
+        cy.findByRole("checkbox")
+          .prev()
+          .should("have.css", "background-color", "rgb(240, 113, 103)");
+      });
+    });
+
+    it("doesn't display modal by default", () => {
+      cy.get('[data-cy="modal"]').should("not.exist");
+    });
+
+    it("displays modal when span clicked", () => {
+      cy.findByRole("form").within(() => {
+        cy.get("span").click({ force: true });
+      });
+
+      cy.get('[data-cy="modal"]').should("exist");
+    });
+
+    it("closes modal when close button clicked", () => {
+      cy.get('[data-cy="modal"]').within(() => {
+        cy.findByRole("button").click();
+      });
+
+      cy.get('[data-cy="modal"]').should("not.exist");
+    });
+  });
 });

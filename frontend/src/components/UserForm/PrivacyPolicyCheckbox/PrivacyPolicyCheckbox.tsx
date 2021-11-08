@@ -1,5 +1,6 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
+import PrivacyPolicyModal from "../PrivacyPolicyModal";
 import {
   PrivacyPolicyCheckboxElement,
   PrivacyPolicyCheckboxFakeInput,
@@ -19,6 +20,8 @@ const PrivacyPolicyCheckbox: FunctionComponent<Props> = ({
   register,
   isError,
 }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
   return (
     <PrivacyPolicyCheckboxWrapper>
       <PrivacyPolicyCheckboxElement>
@@ -27,8 +30,14 @@ const PrivacyPolicyCheckbox: FunctionComponent<Props> = ({
         <StyledTick />
       </PrivacyPolicyCheckboxElement>
       <PrivacyPolicyText>
-        I accept the <PrivacyPolicyTrigger>Privacy Policy</PrivacyPolicyTrigger>
+        I accept the{" "}
+        <PrivacyPolicyTrigger onClick={() => setIsModalVisible(true)}>
+          Privacy Policy
+        </PrivacyPolicyTrigger>
       </PrivacyPolicyText>
+      {isModalVisible && (
+        <PrivacyPolicyModal close={() => setIsModalVisible(false)} />
+      )}
     </PrivacyPolicyCheckboxWrapper>
   );
 };
