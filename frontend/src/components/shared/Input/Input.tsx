@@ -34,7 +34,9 @@ const Input: FunctionComponent<Props> = ({
         {...register}
       />
       <InputUnderline />
-      <InputError data-cy="input-error">{errorMssg}</InputError>
+      <InputError data-cy="input-error" data-testid="input-error">
+        {errorMssg}
+      </InputError>
     </InputWrapper>
   );
 };

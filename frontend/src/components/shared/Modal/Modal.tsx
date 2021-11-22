@@ -18,7 +18,7 @@ const Modal: FunctionComponent<Props> = ({
   children,
 }) => {
   return (
-    <ModalWrapper data-cy="modal">
+    <ModalWrapper data-cy="modal" data-testid="modal">
       <ModalInnerWrapper bg={bgColor}>
         <ModalCloseButton
           bg={bgColor}
