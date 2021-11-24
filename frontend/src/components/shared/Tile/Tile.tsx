@@ -6,11 +6,12 @@ import { TileWrapper, TileTextWrapper, TileText } from "./Tile.components";
 interface Props {
   bg: keyof ThemeType["colors"]["personTile"]["bg"];
   text: string;
+  onClick?: () => void | Promise<void>;
 }
 
-const Tile: FunctionComponent<Props> = ({ bg, text, children }) => {
+const Tile: FunctionComponent<Props> = ({ bg, text, onClick, children }) => {
   return (
-    <TileWrapper bg={bg}>
+    <TileWrapper bg={bg} onClick={onClick}>
       <TileTextWrapper>
         <TileText>{text}</TileText>
         <BgBar color="light" />

@@ -8,8 +8,8 @@ export const TileWrapper = styled.button<{
 }>`
   ${columnDiv}
 
-  width: 206px;
-  height: 191px;
+  width: ${({ bg }) => (bg === "add" ? "280px" : "206px")};
+  height: ${({ bg }) => (bg === "add" ? "125px" : "191px")};
 
   padding: 20px;
 

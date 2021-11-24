@@ -65,6 +65,7 @@ const theme = {
         female: "var(--dark-red)",
         add: "var(--med-blue)",
       },
+      subtreeBg: "var(--yellow)",
     },
     iconButton: {
       disabledBg: "#C4C4C4",

@@ -10,7 +10,11 @@ interface Props {
 
 const IconButton: FunctionComponent<Props> = ({ icon, color, onClick }) => {
   return (
-    <IconButtonWrapper onClick={onClick} color={color}>
+    <IconButtonWrapper
+      onClick={onClick}
+      color={color}
+      data-testid="add-person-button"
+    >
       {icon}
     </IconButtonWrapper>
   );

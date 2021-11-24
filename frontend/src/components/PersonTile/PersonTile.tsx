@@ -1,13 +1,15 @@
 import Tile from "components/shared/Tile";
-import React, { FunctionComponent } from "react";
+import React, { Dispatch, FunctionComponent, SetStateAction } from "react";
 import {
   PersonTileAddButton,
   PersonTileBirthDate,
   PersonTileImage,
   PersonTileImgWrapper,
+  PersonTileSubtreeBttn,
   PersonTileWrapper,
 } from "./PersonTile.components";
 import { ReactComponent as AddIcon } from "images/addUser.svg";
+import { ReactComponent as DotsIcon } from "images/subtree.svg";
 import IconButton from "components/shared/IconButton";
 
 interface Props {
@@ -15,6 +17,10 @@ interface Props {
   gender: "male" | "female";
   birthDate: string;
   imgUrl?: string;
+  id: string;
+  node: any;
+  style: object;
+  onSubClick: Dispatch<SetStateAction<string>>;
 }
 
 const PersonTile: FunctionComponent<Props> = ({
@@ -22,9 +28,12 @@ const PersonTile: FunctionComponent<Props> = ({
   gender,
   birthDate,
   imgUrl,
+  node,
+  style,
+  onSubClick,
 }) => {
   return (
-    <PersonTileWrapper>
+    <PersonTileWrapper style={style}>
       <Tile text={name} bg={gender}>
         <PersonTileBirthDate>{birthDate}</PersonTileBirthDate>
         <PersonTileImgWrapper>
@@ -34,6 +43,11 @@ const PersonTile: FunctionComponent<Props> = ({
       <PersonTileAddButton>
         <IconButton icon={<AddIcon />} color="green" />
       </PersonTileAddButton>
+      {node.hasSubTree && (
+        <PersonTileSubtreeBttn onClick={() => onSubClick(node.id)}>
+          <DotsIcon />
+        </PersonTileSubtreeBttn>
+      )}
     </PersonTileWrapper>
   );
 };

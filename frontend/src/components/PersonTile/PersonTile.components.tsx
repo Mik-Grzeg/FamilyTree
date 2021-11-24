@@ -1,7 +1,10 @@
 import styled from "styled-components";
+import { centeredDiv } from "styles/mixins";
 
 export const PersonTileWrapper = styled.div`
-  position: relative;
+  position: absolute;
+
+  ${centeredDiv}
 `;
 
 export const PersonTileBirthDate = styled.div`
@@ -30,7 +33,22 @@ export const PersonTileImage = styled.img`
 
 export const PersonTileAddButton = styled.div`
   position: absolute;
-  bottom: -10px;
-  right: -10px;
+  bottom: 20px;
+  right: 20px;
   z-index: 3;
+`;
+
+export const PersonTileSubtreeBttn = styled.button`
+  ${centeredDiv}
+
+  width: 54px;
+  height: 21px;
+
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  z-index: 3;
+
+  border-radius: 5px 5px 0 0;
+  background-color: ${({ theme }) => theme.colors.personTile.subtreeBg};
 `;
