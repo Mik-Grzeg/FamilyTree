@@ -54,6 +54,18 @@ const theme = {
         default: "var(--med-blue)",
       },
     },
+    personTile: {
+      bg: {
+        male: "var(--turqoise)",
+        female: "var(--red)",
+        add: "var(--light-blue)",
+      },
+      hoverBg: {
+        male: "var(--dark-turqoise)",
+        female: "var(--dark-red)",
+        add: "var(--med-blue)",
+      },
+    },
   },
   heights: {
     header: "var(--header-height)",
