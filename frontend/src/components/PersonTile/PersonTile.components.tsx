@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+export const PersonTileWrapper = styled.div`
+  position: relative;
+`;
+
 export const PersonTileBirthDate = styled.div`
   font-size: ${({ theme }) => theme.fonts.sizes.s};
   font-family: ${({ theme }) => theme.fonts.families.fancy};
@@ -22,4 +26,11 @@ export const PersonTileImgWrapper = styled.div`
 export const PersonTileImage = styled.img`
   height: 80px;
   width: auto;
+`;
+
+export const PersonTileAddButton = styled.div`
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  z-index: 3;
 `;
