@@ -4,7 +4,8 @@ extern crate diesel;
 use lazy_static::lazy_static;
 
 
-use actix_web::{middleware, web, App, HttpServer};
+use actix_web::{middleware, web, App, HttpServer, http};
+use actix_cors::Cors;
 use diesel::prelude::*;
 use diesel::r2d2::{self, ConnectionManager};
 
@@ -39,9 +40,16 @@ async fn main() -> std::io::Result<()> {
     let host = std::env::var("AUTH_HOST").unwrap_or_else(|_| "0.0.0.0".to_string());
     let url = format!("{}:{}", host, port);
     HttpServer::new(move|| {
+        let cors = Cors::default()
+            .allowed_origin("frontend:3000")
+            .allowed_methods(vec!["GET", "POST"])
+            .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
+            .allowed_header(http::header::CONTENT_TYPE)
+            .max_age(3600);
         App::new()
             .data(VALUES.pool.clone())
             .wrap(middleware::Logger::default())
+            .wrap(cors)
             .service(web::scope("/user").configure(user_handling::routes::init_routes))
     })
         .bind(url)?
