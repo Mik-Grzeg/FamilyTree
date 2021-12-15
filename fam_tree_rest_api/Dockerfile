@@ -43,11 +43,11 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN adduser --disabled-password api_runner
+# RUN adduser --disabled-password api_runner
 
 COPY --from=builder /family_tree/api/api /opt/tree_api
 
-USER api_runner
+# USER api_runner
 ENV PATH="/opt:$PATH"
 
 EXPOSE ${API_PORT}

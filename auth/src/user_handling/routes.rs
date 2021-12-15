@@ -27,7 +27,7 @@ async fn authenticate(_req: HttpRequest) -> HttpResponse {
     let token = _split[1].trim();
     match handlers::auth_function(token) {
         Ok(result) => HttpResponse::Ok().json(result),
-        Err(err) => HttpResponse::Ok().json(err),
+        Err(err) => HttpResponse::Unauthorized().json(err),
     }
 }
 
