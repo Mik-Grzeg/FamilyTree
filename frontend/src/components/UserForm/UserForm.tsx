@@ -56,13 +56,9 @@ const UserForm: FunctionComponent = () => {
         }
       );
 
-      if (!res.data.status)
-        throw new Error(res.data.message ?? "Troubles handling your request!");
-
-      if (active === 0)
-        axios.defaults.headers.common[
-          "Authorization"
-        ] = `Bearer: ${res.data.token}`;
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer: ${res.data.token}`;
 
       changeUserContextValue({
         username: data.username,
