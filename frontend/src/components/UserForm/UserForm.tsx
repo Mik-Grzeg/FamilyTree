@@ -19,10 +19,14 @@ import {
   PASSWD_MAX_LENGTH_MSSG,
   PASSWD_MIN_LENGTH,
   PASSWD_MIN_LENGTH_MSSG,
-} from "utils/userForm.consts";
+} from "utils/formConsts/userForm.consts";
 import PrivacyPolicyCheckbox from "./PrivacyPolicyCheckbox";
-import axios from "axios";
 import { LOGIN_URL, REGISTER_URL } from "utils/auth.routes";
+import { useUserContext } from "context/UserContext/useUserContext";
+import { UserFormResponseT } from "utils/types/responses/userFormResponse.type";
+import axios from "axios";
+import { USER_FORM_ERROR_TOASTID } from "utils/toast.ids";
+import { handleErrorMssg } from "utils/functions/handleErrorMssg";
 
 type Inputs = {
   username: string;
@@ -33,6 +37,8 @@ type Inputs = {
 const UserForm: FunctionComponent = () => {
   const [active, setIsActive] = useState(0); // 0 - login form, 1 - register form
 
+  const { changeUserContextValue } = useUserContext();
+
   const {
     register,
     handleSubmit,
@@ -41,18 +47,30 @@ const UserForm: FunctionComponent = () => {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
-    //TODO login/register query // active === 0 ? LOGIN_URL : REGISTER_URL
     try {
-      const res = await axios.post(LOGIN_URL, {
+      const res = await axios.post<UserFormResponseT>(
+        active === 0 ? LOGIN_URL : REGISTER_URL,
+        {
+          username: data.username,
+          password: data.password,
+        }
+      );
+
+      if (!res.data.status)
+        throw new Error(res.data.message ?? "Troubles handling your request!");
+
+      if (active === 0)
+        axios.defaults.headers.common[
+          "Authorization"
+        ] = `Bearer: ${res.data.token}`;
+
+      changeUserContextValue({
         username: data.username,
-        password: data.password,
+        isLoggedIn: res.data.status,
       });
-      console.log(res);
     } catch (e) {
       if (!(e instanceof Error)) return;
-      console.log("error");
-      console.log(e);
+      handleErrorMssg(e, USER_FORM_ERROR_TOASTID);
     }
   };
 
