@@ -21,6 +21,8 @@ import {
   PASSWD_MIN_LENGTH_MSSG,
 } from "utils/userForm.consts";
 import PrivacyPolicyCheckbox from "./PrivacyPolicyCheckbox";
+import axios from "axios";
+import { LOGIN_URL, REGISTER_URL } from "utils/auth.routes";
 
 type Inputs = {
   username: string;
@@ -29,7 +31,7 @@ type Inputs = {
 };
 
 const UserForm: FunctionComponent = () => {
-  const [active, setIsActive] = useState(0);
+  const [active, setIsActive] = useState(0); // 0 - login form, 1 - register form
 
   const {
     register,
@@ -40,7 +42,18 @@ const UserForm: FunctionComponent = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(data);
-    //TODO login/register query
+    //TODO login/register query // active === 0 ? LOGIN_URL : REGISTER_URL
+    try {
+      const res = await axios.post(LOGIN_URL, {
+        username: data.username,
+        password: data.password,
+      });
+      console.log(res);
+    } catch (e) {
+      if (!(e instanceof Error)) return;
+      console.log("error");
+      console.log(e);
+    }
   };
 
   const changeForm = useCallback(
