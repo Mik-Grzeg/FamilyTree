@@ -22,6 +22,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(AuthMiddlewareFactory)
             .wrap(middleware::DefaultHeaders::new().header("Content-Type", "application/json"))
             .wrap(middleware::Logger::default())
+            .wrap(middleware::NormalizePath::new(
+                middleware::TrailingSlash::Trim,
+            ))
             .app_data(app_state.clone())
             .configure(controller::init_individuals_controller)
             .configure(controller::init_relationships_controller)
