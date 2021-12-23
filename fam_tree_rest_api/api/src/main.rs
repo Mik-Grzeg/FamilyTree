@@ -27,6 +27,7 @@ async fn main() -> std::io::Result<()> {
             .configure(controller::init_relationships_controller)
             .configure(controller::init_families_controller)
             .configure(controller::init_health_controller)
+            .configure(controller::init_api_docs)
             .default_service(web::route().to(controller::default_route::not_found))
     })
     .bind(config.get_app_url())?;

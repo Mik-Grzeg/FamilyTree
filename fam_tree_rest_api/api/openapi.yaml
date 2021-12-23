@@ -3,7 +3,7 @@ info:
   version: '1.0.0'
   title: 'Genelogy API'
 servers:
-  - url: 'http://haproxy/api/v1/genealogy'
+  - url: 'http://localhost/api/v1/genealogy'
 paths:
   /individuals:
     get:
@@ -44,6 +44,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /health:
+    get:
+      summary: Health check endpoint
+      operationId: checkHealth
+      responses:
+        '200':
+          description: 'Service is healthy'
+        '503':
+          description: 'Service is not healthy'
 
 components:
   schemas:
