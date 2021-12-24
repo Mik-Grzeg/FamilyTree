@@ -1,22 +1,22 @@
 
 # Table of Contents
 
-1.  [Family Tree IO Project](#org6bf04f8)
-    1.  [usage](#org24193fa)
-    2.  [development](#orgfd0960b)
-    3.  [Technologies](#org5ba07a2)
-    4.  [TODO](#orgf98aab7)
+1.  [Family Tree IO Project](#org4db8301)
+    1.  [usage](#orgdc9ff4d)
+    2.  [development](#org7d36b8b)
+    3.  [Technologies](#org02e0da0)
+    4.  [TODO](#org64d1684)
 
 
 
-<a id="org6bf04f8"></a>
+<a id="org4db8301"></a>
 
 # Family Tree IO Project
 
 A feature-rich web application that <del>is</del> will be designed for creating family trees. <del>User-friendly ui design with many functionalities</del>.
 
 
-<a id="org24193fa"></a>
+<a id="orgdc9ff4d"></a>
 
 ## usage
 
@@ -33,11 +33,10 @@ Choose one of the following commands depending on the needed environment.
 
 -   Dev 
     
-        docker-compose up -d --build
+        docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
 -   Prod
     
-        export IMAGE_REG=<registry>
-        docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --build
+        docker-compose up -d --build
 
 Assuming the builds haven&rsquo;t failed, check whether neccessary containers/services are already up, it may take some time.
 
@@ -56,7 +55,7 @@ Assuming the builds haven&rsquo;t failed, check whether neccessary containers/se
     -   Create a ticket on clickup with an explanation of the situation (maybe error trace from logs)
 
 
-<a id="orgfd0960b"></a>
+<a id="org7d36b8b"></a>
 
 ## development
 
@@ -75,7 +74,7 @@ Currently paths for specific services are also presented on the diagram below
 ![img](./media/Paths.drawio.svg)
 
 
-<a id="org5ba07a2"></a>
+<a id="org02e0da0"></a>
 
 ## Technologies
 
@@ -120,7 +119,7 @@ Currently paths for specific services are also presented on the diagram below
     -   cypress
 
 
-<a id="orgf98aab7"></a>
+<a id="org64d1684"></a>
 
 ## TODO
 

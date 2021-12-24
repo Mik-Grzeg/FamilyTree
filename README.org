@@ -18,14 +18,13 @@ Build provided images and start services with one command.
 Choose one of the following commands depending on the needed environment.
 + Dev 
     #+BEGIN_EXAMPLE
-    docker-compose up -d --build
+    docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up -d --build
     #+END_EXAMPLE
 + Prod
     #+BEGIN_EXAMPLE
-    export IMAGE_REG=<registry>
-    docker-compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --build
+    docker-compose up -d --build
     #+END_EXAMPLE
-
+    
 Assuming the builds haven't failed, check whether neccessary containers/services are already up, it may take some time.
 #+BEGIN_EXAMPLE
 docker-compose ps
