@@ -1,22 +1,23 @@
 
 # Table of Contents
 
-1.  [Family Tree IO Project](#org4db8301)
-    1.  [usage](#orgdc9ff4d)
-    2.  [development](#org7d36b8b)
-    3.  [Technologies](#org02e0da0)
-    4.  [TODO](#org64d1684)
+1.  [Family Tree IO Project](#org6139d20)
+    1.  [usage](#orgcb7c8ef)
+    2.  [development](#orge17bfc3)
+    3.  [testing](#org6356813)
+    4.  [Technologies](#org2350180)
+    5.  [TODO](#orgc84cdc9)
 
 
 
-<a id="org4db8301"></a>
+<a id="org6139d20"></a>
 
 # Family Tree IO Project
 
 A feature-rich web application that <del>is</del> will be designed for creating family trees. <del>User-friendly ui design with many functionalities</del>.
 
 
-<a id="orgdc9ff4d"></a>
+<a id="orgcb7c8ef"></a>
 
 ## usage
 
@@ -55,7 +56,7 @@ Assuming the builds haven&rsquo;t failed, check whether neccessary containers/se
     -   Create a ticket on clickup with an explanation of the situation (maybe error trace from logs)
 
 
-<a id="org7d36b8b"></a>
+<a id="orge17bfc3"></a>
 
 ## development
 
@@ -74,7 +75,39 @@ Currently paths for specific services are also presented on the diagram below
 ![img](./media/Paths.drawio.svg)
 
 
-<a id="org02e0da0"></a>
+<a id="org6356813"></a>
+
+## testing
+
+
+### integration tests
+
+For these type of tests we used [Pytest](<https://docs.pytest.org/en/6.2.x/>)  alongside with docker-compose which sets up the environment
+Location of the tests - <./integration_tests>
+
+1.  How to run:
+
+    You can use virtual environment (recommended)
+    
+    Install dependencies 
+    
+        pip install -r integration_tests/requirements.txt
+    
+    Being in the project root directory start tests with one of the command below
+    
+    -   Create new infrastructure for the tests (make sure project containers are down)
+        
+            python -m pytest integration_tests \
+            --docker-compose=docker-compose.yaml
+    
+    -   Use existing infrastructure (not recommended though, may cause duplicates in database)
+        
+            python -m pytest integration_tests \
+            --docker-compose=docker-compose.yaml --docker-compose-no-build \
+            --use-running-containers
+
+
+<a id="org2350180"></a>
 
 ## Technologies
 
@@ -119,7 +152,7 @@ Currently paths for specific services are also presented on the diagram below
     -   cypress
 
 
-<a id="org64d1684"></a>
+<a id="orgc84cdc9"></a>
 
 ## TODO
 
