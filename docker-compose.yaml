@@ -24,6 +24,7 @@ services:
     restart: on-failure
 
   auth_migrator:
+    image: ${IMAGE_REG}-auth_migrator:1.0.0
     build:
       context: ./auth
       target: auth_migrator
@@ -51,6 +52,7 @@ services:
     restart: always
 
   auth_api:
+    image: ${IMAGE_REG}-auth_api:1.0.0
     build:
       context: ./auth
       target: auth_api
