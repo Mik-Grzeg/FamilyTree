@@ -2,7 +2,7 @@ use chrono::NaiveDate;
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
-use super::Id;
+use super::{Id, Individual};
 
 #[derive(Serialize, Deserialize, Clone, FromRow, Debug)]
 pub struct Individuals {
@@ -12,6 +12,12 @@ pub struct Individuals {
 
     #[serde(with = "date_format")]
     pub date_of_birth: NaiveDate,
+}
+#[derive(Serialize, Deserialize, Clone, FromRow)]
+pub struct IndividualBaseInfo {
+    pub id: Id,
+    pub first_name: String,
+    pub last_name: String,
 }
 
 mod date_format {

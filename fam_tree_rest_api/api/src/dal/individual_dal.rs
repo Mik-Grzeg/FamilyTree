@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 
 use super::Table;
-use super::{Id, Individual};
+use super::{Id, Individual, IndividualBaseInfo};
 use sqlx::postgres::PgQueryResult;
 use sqlx::Row;
 
@@ -12,6 +12,22 @@ impl Table<'_, Individual> {
             SELECT id, first_name, last_name, date_of_birth
             FROM individuals"#,
         )
+        .fetch_all(&*self.pool)
+        .await
+    }
+
+    pub async fn get_base_info_ind_in_family(
+        &self,
+        family_id: i32,
+    ) -> Result<Vec<IndividualBaseInfo>, sqlx::Error> {
+        sqlx::query_as(
+            r#"
+            SELECT i.id, i.first_name, i.last_name
+            FROM individualtofamilies f
+            LEFT JOIN individuals i ON f.individual_id=i.id
+            WHERE f.family_id=$1"#,
+        )
+        .bind(family_id)
         .fetch_all(&*self.pool)
         .await
     }

@@ -23,5 +23,3 @@ services:
     build:
       context: ./fam_tree_rest_api
       target: migrator
-
-

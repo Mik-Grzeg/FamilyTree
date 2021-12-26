@@ -4,7 +4,7 @@ use serde::Serialize;
 use super::AppState;
 
 use crate::errors::AppError;
-use crate::models::{Individual, Relationship};
+use crate::models::{FamTree, Individual, IndividualBaseInfo, Relationship};
 
 pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(create_relationship)
@@ -34,18 +34,32 @@ async fn create_relationship(
     Ok(HttpResponse::Created().json(rel_id))
 }
 
+#[derive(Serialize)]
+struct FamTreeWithInfo {
+    relations: Vec<FamTree>,
+    infos: Vec<IndividualBaseInfo>,
+}
+
 #[get("/tree/{family_id}")]
 async fn get_family_tree(
     family_id: web::Path<i32>,
     app_state: web::Data<AppState<'_>>,
 ) -> Result<HttpResponse, AppError> {
-    let fam_tree = app_state
+    let fam_id = family_id.into_inner();
+
+    let relations = app_state
         .context
         .relationships
-        .get_family_as_relationships(family_id.into_inner())
+        .get_family_as_relationships(fam_id)
         .await?;
 
-    Ok(HttpResponse::Ok().json(fam_tree))
+    let infos = app_state
+        .context
+        .individuals
+        .get_base_info_ind_in_family(fam_id)
+        .await?;
+
+    Ok(HttpResponse::Ok().json(FamTreeWithInfo { relations, infos }))
 }
 
 #[put("/relationships")]

@@ -8,6 +8,8 @@ paths:
   /individuals:
     get:
       summary: 'Returns all the individuals'
+      security:
+        - BearerAuth: []
       operationId: listIndividuals
       tags:
         - individuals
@@ -33,8 +35,6 @@ paths:
         - individuals
       requestBody:
         $ref: '#/components/requestBodies/IndividualBodyPost'
-
-
       responses:
         '201':
           description: Created
@@ -44,6 +44,107 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+    put:
+      summary: 'Update or create individual'
+      operationId: putIndividual
+      tags:
+        - individuals
+      requestBody:
+        $ref: '#/components/schemas/Individual'
+      responses:
+        '200':
+          description: Updated or created
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete/{id}:
+      summary: Delete an individual
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the individual to be deleted
+      operationId: deleteIndividual
+      tags:
+        - individuals
+      responses:
+        '204':
+          description: Deleted requested individual
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+
+  /relationships:
+    post:
+      summary: Add new relation
+      operationId: addRelation
+      tags:
+        - relations
+      requestBody:
+        $ref: '#/components/schemas/Relationship'
+      responses:
+        '201':
+          description: Created new relation
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update existing relation or add a new one
+      operationId: putRelation
+      tags:
+        - relations
+      requestBody:
+        $ref: '#/components/schemas/ExistingRelationship'
+      responses:
+        '201':
+          description: Created new relation
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /tree/{familyId}:
+    get:
+      summary: Get a family tree by ID
+      parameters:
+        - in: path
+          name: familyId
+          schema:
+            type: integer
+          required: true
+          description: Numeric ID of the requested family
+      operationId: getTree
+      tags:
+        - relations
+      responses:
+        '200':
+          description: Family tree structure and basic information about the individuals in the family
+          content:
+            application/json:
+              schema:
+                type: objects
+                $ref: '#/components/schemas/FamTreeWithInformation'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
   /health:
     get:
       summary: Health check endpoint
@@ -54,12 +155,23 @@ paths:
         '503':
           description: 'Service is not healthy'
 
+
 components:
   schemas:
     Individual:
+      allOf:
+        - $ref: '#/components/schemas/IndividualBaseInfo'
+        - type: object
+          required:
+            - id
+          properties:
+            date_of_birth:
+              type: string
+              format: date
+
+    IndividualBaseInfo:
       type: object
       required:
-        - id
         - first_name
         - last_name
         - date_of_birth
@@ -71,9 +183,94 @@ components:
           type: string
         last_name:
           type: string
-        date_of_birth:
+
+    Relationship:
+      type: object
+      required:
+        - individual_1_id
+        - individual_2_id
+        - relationship_type
+        - individual_1_role
+        - individual_2_role
+      properties:
+        individual_1_id:
+          type: integer
+          format: int32
+        individual_2_id:
+          type: integer
+          format: int32
+        relationship_type:
           type: string
-          format: date
+          $ref: "#/components/schemas/RelType"
+        individual_1_role:
+          type: string
+          $ref: "#/components/schemas/Role"
+        individual_2_role:
+          type: string
+          $ref: "#/components/schemas/Role"
+    ExistingRelationship:
+      allOf:
+        - $ref: '#/components/schemas/Relationship'
+        - type: object
+          properties:
+            id:
+              type: integer
+              format: int32
+
+    FamTreeWithInformation:
+      type: object
+      properties:
+        relations:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/FamilyTreeRecord"
+        infos:
+          type: array
+          items:
+            type: object
+            $ref: "#/components/schemas/IndividualBaseInfo"
+
+    FamilyTreeRecord:
+      type: object
+      properties:
+        individual:
+          type: integer
+          format: int32
+        siblings:
+          type: array
+          $ref: "#/components/schemas/VecOfPreparedRelations"
+        parents:
+          type: array
+          $ref: "#/components/schemas/VecOfPreparedRelations"
+        children:
+          type: array
+          $ref: "#/components/schemas/VecOfPreparedRelations"
+        spouses:
+          type: array
+          $ref: "#/components/schemas/VecOfPreparedRelations"
+
+
+    VecOfPreparedRelations:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: integer
+            format: int32
+          rel_type:
+            type: string
+            $ref: "#/components/schemas/RelType"
+
+    RelType:
+      type: string
+      enum: [Blood, Married, Divorced, Adopted]
+
+    Role:
+      type: string
+      enum: [Parent, Child, Spouse, Sibling]
+
     Error:
       type: object
       required:
@@ -86,9 +283,10 @@ components:
         message:
           type: string
   securitySchemes:
-    BasicAuth:
+    BearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer
+
   requestBodies:
     IndividualBodyPost:
       description: Example request body
@@ -106,4 +304,4 @@ components:
                 format: date
 
 security:
-  - BasicAuth: []
+  - BearerAuth: []
