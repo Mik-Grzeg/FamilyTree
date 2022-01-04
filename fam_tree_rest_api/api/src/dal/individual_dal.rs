@@ -9,7 +9,7 @@ impl Table<'_, Individual> {
     pub async fn get_individuals_all(&self) -> Result<Vec<Individual>, sqlx::Error> {
         sqlx::query_as(
             r#"
-            SELECT id, first_name, last_name, date_of_birth
+            SELECT id, first_name, last_name, date_of_birth, gender
             FROM individuals"#,
         )
         .fetch_all(&*self.pool)
@@ -22,7 +22,7 @@ impl Table<'_, Individual> {
     ) -> Result<Vec<IndividualBaseInfo>, sqlx::Error> {
         sqlx::query_as(
             r#"
-            SELECT i.id, i.first_name, i.last_name
+            SELECT i.id, i.first_name, i.gender
             FROM individualtofamilies f
             LEFT JOIN individuals i ON f.individual_id=i.id
             WHERE f.family_id=$1"#,
@@ -35,13 +35,14 @@ impl Table<'_, Individual> {
     pub async fn create_individual(&self, individual: &Individual) -> Result<i32, sqlx::Error> {
         sqlx::query(
             r#"
-            INSERT INTO Individuals (first_name, last_name, date_of_birth)
-            VALUES ($1, $2, $3)
+            INSERT INTO Individuals (first_name, last_name, date_of_birth, gender)
+            VALUES ($1, $2, $3, $4)
             RETURNING id"#,
         )
         .bind(&individual.first_name)
         .bind(&individual.last_name)
         .bind(&individual.date_of_birth)
+        .bind(&individual.gender)
         .fetch_one(&*self.pool)
         .await?
         .try_get(0)
@@ -53,18 +54,19 @@ impl Table<'_, Individual> {
     ) -> Result<Individual, sqlx::Error> {
         sqlx::query_as(
             r#"
-            INSERT INTO Individuals (id, first_name, last_name, date_of_birth)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO Individuals (id, first_name, last_name, date_of_birth, gender)
+            VALUES ($1, $2, $3, $4, gender)
             ON CONFLICT (id)
             DO UPDATE
-            SET first_name = $2, last_name = $3, date_of_birth = $4
-            RETURNING id, first_name, last_name, date_of_birth
+            SET first_name = $2, last_name = $3, date_of_birth = $4, gender = $5
+            RETURNING id, first_name, last_name, date_of_birth, gender
             "#,
         )
         .bind(&individual.id)
         .bind(&individual.first_name)
         .bind(&individual.last_name)
         .bind(&individual.date_of_birth)
+        .bind(&individual.gender)
         .fetch_one(&*self.pool)
         .await
     }

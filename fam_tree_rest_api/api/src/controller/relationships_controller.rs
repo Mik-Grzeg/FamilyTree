@@ -40,12 +40,16 @@ struct FamTreeWithInfo {
     infos: Vec<IndividualBaseInfo>,
 }
 
-#[get("/tree/{family_id}")]
+#[get("/tree/{username}")]
 async fn get_family_tree(
-    family_id: web::Path<i32>,
+    username: web::Path<String>,
     app_state: web::Data<AppState<'_>>,
 ) -> Result<HttpResponse, AppError> {
-    let fam_id = family_id.into_inner();
+    let fam_id = app_state
+        .context
+        .families
+        .get_family_id_by_author(username.into_inner())
+        .await?;
 
     let relations = app_state
         .context

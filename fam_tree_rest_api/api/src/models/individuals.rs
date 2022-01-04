@@ -9,6 +9,7 @@ pub struct Individuals {
     pub id: Id,
     pub first_name: String,
     pub last_name: String,
+    pub gender: String,
 
     #[serde(with = "date_format")]
     pub date_of_birth: NaiveDate,
@@ -17,7 +18,7 @@ pub struct Individuals {
 pub struct IndividualBaseInfo {
     pub id: Id,
     pub first_name: String,
-    pub last_name: String,
+    pub gender: String,
 }
 
 mod date_format {

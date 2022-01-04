@@ -5,6 +5,7 @@ use super::Id;
 
 #[derive(sqlx::Type, Deserialize, Serialize, Debug, Clone)]
 #[sqlx(type_name = "role", rename_all = "lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum Role {
     Parent,
     Child,
@@ -14,6 +15,7 @@ pub enum Role {
 
 #[derive(sqlx::Type, Deserialize, Serialize, Debug, Clone, Copy)]
 #[sqlx(type_name = "reltype", rename_all = "lowercase")]
+#[serde(rename_all = "lowercase")]
 pub enum RelType {
     Blood,
     Married,
@@ -23,7 +25,7 @@ pub enum RelType {
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct PreparedRelation {
-    pub id: Id,
+    pub id: String,
 
     #[serde(rename = "type")]
     pub rel_type: RelType,

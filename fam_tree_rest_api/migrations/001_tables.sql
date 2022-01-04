@@ -2,12 +2,13 @@ CREATE TABLE IF NOT EXISTS Individuals (
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(60),
     last_name VARCHAR(60),
-    date_of_birth DATE
+    date_of_birth DATE,
+    gender VARCHAR(20)
 );
 
 CREATE TABLE IF NOT EXISTS Families (
     id SERIAL PRIMARY KEY,
-    boss_of_the_family INT REFERENCES Individuals,
+    author_username VARCHAR(60),
     family_name VARCHAR(60)
 );
 
