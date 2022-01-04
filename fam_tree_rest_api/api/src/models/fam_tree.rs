@@ -103,28 +103,32 @@ fn test_single_id_input_results_single_ind() {
 
 #[test]
 fn test_relations_correct_output() {
-    let ids: Vec<Id> = vec![Some(1), Some(2), Some(3)];
+    let ids: Vec<(Id, String)> = vec![
+        (Some(1), "test1".to_string()),
+        (Some(2), "test2".to_string()),
+        (Some(3), "test3".to_string()),
+    ];
     let rels: Vec<Relationships> = vec![
         Relationships {
             id: Some(0),
-            individual_1_id: ids[0],
-            individual_2_id: ids[1],
+            individual_1_id: ids[0].0,
+            individual_2_id: ids[1].0,
             relationship_type: RelType::Blood,
             individual_1_role: Role::Child,
             individual_2_role: Role::Parent,
         },
         Relationships {
             id: Some(1),
-            individual_1_id: ids[1],
-            individual_2_id: ids[2],
+            individual_1_id: ids[1].0,
+            individual_2_id: ids[2].0,
             relationship_type: RelType::Married,
             individual_1_role: Role::Spouse,
             individual_2_role: Role::Spouse,
         },
         Relationships {
             id: Some(2),
-            individual_1_id: ids[2],
-            individual_2_id: ids[0],
+            individual_1_id: ids[2].0,
+            individual_2_id: ids[0].0,
             relationship_type: RelType::Blood,
             individual_1_role: Role::Parent,
             individual_2_role: Role::Child,

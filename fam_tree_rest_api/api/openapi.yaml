@@ -230,6 +230,8 @@ components:
           items:
             type: object
             $ref: "#/components/schemas/IndividualBaseInfo"
+        rootId:
+          type: string
 
     FamilyTreeRecord:
       type: object

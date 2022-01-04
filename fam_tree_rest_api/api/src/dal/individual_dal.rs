@@ -22,7 +22,7 @@ impl Table<'_, Individual> {
     ) -> Result<Vec<IndividualBaseInfo>, sqlx::Error> {
         sqlx::query_as(
             r#"
-            SELECT i.id, i.first_name, i.gender
+            SELECT i.id, i.first_name, i.last_name, i.date_of_birth
             FROM individualtofamilies f
             LEFT JOIN individuals i ON f.individual_id=i.id
             WHERE f.family_id=$1"#,

@@ -35,9 +35,11 @@ async fn create_relationship(
 }
 
 #[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
 struct FamTreeWithInfo {
     relations: Vec<FamTree>,
     infos: Vec<IndividualBaseInfo>,
+    root_id: String,
 }
 
 #[get("/tree/{username}")]
@@ -45,7 +47,7 @@ async fn get_family_tree(
     username: web::Path<String>,
     app_state: web::Data<AppState<'_>>,
 ) -> Result<HttpResponse, AppError> {
-    let fam_id = app_state
+    let (fam_id, root_id): (i32, i32) = app_state
         .context
         .families
         .get_family_id_by_author(username.into_inner())
@@ -63,7 +65,11 @@ async fn get_family_tree(
         .get_base_info_ind_in_family(fam_id)
         .await?;
 
-    Ok(HttpResponse::Ok().json(FamTreeWithInfo { relations, infos }))
+    Ok(HttpResponse::Ok().json(FamTreeWithInfo {
+        relations,
+        infos,
+        root_id: root_id.to_string(),
+    }))
 }
 
 #[put("/relationships")]
