@@ -172,17 +172,16 @@ components:
     IndividualBaseInfo:
       type: object
       required:
-        - first_name
-        - last_name
+        - full_name
         - date_of_birth
       properties:
         id:
-          type: integer
-          format: int64
-        first_name:
           type: string
-        last_name:
+        names:
           type: string
+        date_of_birth:
+          type: string
+          format: date
 
     Relationship:
       type: object
@@ -267,11 +266,11 @@ components:
 
     RelType:
       type: string
-      enum: [Blood, Married, Divorced, Adopted]
+      enum: [blood, married, divorced, adopted]
 
     Role:
       type: string
-      enum: [Parent, Child, Spouse, Sibling]
+      enum: [parent, child, spouse, sibling]
 
     Error:
       type: object
@@ -296,14 +295,38 @@ components:
       content:
         application/json:
           schema:
+            required:
+              - names
+              - date_of_birth
+              - gender
+              - hometown
             properties:
-              first_name:
-                type: string
-              last_name:
+              names:
                 type: string
               date_of_birth:
                 type: string
                 format: date
+              date_of_death:
+                type: string
+                format: date
+              gender:
+                type: string
+              hometown:
+                type: string
+              job:
+                type: string
+              relative:
+                type: string
+              relation:
+                type: string
+                $ref: "#/components/schemas/RelType"
+              role_to_relative:
+                type: string
+                $ref: "#/components/schemas/Role"
+              relatives_role:
+                type: string
+                $ref: "#/components/schemas/Role"
+
 
 security:
   - BearerAuth: []

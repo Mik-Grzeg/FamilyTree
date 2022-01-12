@@ -2,6 +2,7 @@ use std::convert::TryInto;
 
 use super::Table;
 use super::{Id, Individual, IndividualBaseInfo};
+use log::debug;
 use sqlx::postgres::PgQueryResult;
 use sqlx::Row;
 
@@ -9,7 +10,7 @@ impl Table<'_, Individual> {
     pub async fn get_individuals_all(&self) -> Result<Vec<Individual>, sqlx::Error> {
         sqlx::query_as(
             r#"
-            SELECT id, first_name, last_name, date_of_birth, gender
+            SELECT *
             FROM individuals"#,
         )
         .fetch_all(&*self.pool)
@@ -20,32 +21,43 @@ impl Table<'_, Individual> {
         &self,
         family_id: i32,
     ) -> Result<Vec<IndividualBaseInfo>, sqlx::Error> {
-        sqlx::query_as(
+        let inds: Vec<Individual> = sqlx::query_as(
             r#"
-            SELECT i.id, i.first_name, i.last_name, i.date_of_birth
+            SELECT i.*
             FROM individualtofamilies f
             LEFT JOIN individuals i ON f.individual_id=i.id
             WHERE f.family_id=$1"#,
         )
         .bind(family_id)
         .fetch_all(&*self.pool)
-        .await
+        .await?;
+        debug!("Individuals: {:?}", inds);
+
+        Ok(inds
+            .into_iter()
+            .map(|ind| IndividualBaseInfo::from(ind))
+            .collect())
     }
 
     pub async fn create_individual(&self, individual: &Individual) -> Result<i32, sqlx::Error> {
-        sqlx::query(
+        let id = sqlx::query(
             r#"
-            INSERT INTO Individuals (first_name, last_name, date_of_birth, gender)
-            VALUES ($1, $2, $3, $4)
+            INSERT INTO Individuals (names, gender, date_of_birth, date_of_death, hometown, hobbies, job)
+            VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING id"#,
         )
-        .bind(&individual.first_name)
-        .bind(&individual.last_name)
-        .bind(&individual.date_of_birth)
+        .bind(&individual.names)
         .bind(&individual.gender)
+        .bind(&individual.date_of_birth)
+        .bind(&individual.date_of_death)
+        .bind(&individual.hometown)
+        .bind(&individual.hobbies)
+        .bind(&individual.job)
         .fetch_one(&*self.pool)
-        .await?
-        .try_get(0)
+        .await;
+
+        id.map_err(|e| debug!("{:?}", e)).unwrap().try_get(0)
+        //tmp.try_get(0)
     }
 
     pub async fn update_individual(
@@ -63,8 +75,6 @@ impl Table<'_, Individual> {
             "#,
         )
         .bind(&individual.id)
-        .bind(&individual.first_name)
-        .bind(&individual.last_name)
         .bind(&individual.date_of_birth)
         .bind(&individual.gender)
         .fetch_one(&*self.pool)
