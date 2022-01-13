@@ -1,10 +1,13 @@
 use actix_web::{delete, get, post, put, web, HttpResponse, Responder};
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 
 use super::AppState;
 
 use crate::errors::AppError;
-use crate::models::{FamTree, Individual, IndividualBaseInfo, Relationship};
+use crate::models::{
+    relationships::{RelType, Role},
+    FamTree, Id, Individual, IndividualBaseInfo, Relationship,
+};
 
 pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(create_relationship)
@@ -17,12 +20,28 @@ struct RelId {
     id: i32,
 }
 
+#[derive(Deserialize)]
+struct PostRelationBody {
+    pub id: Id,
+    pub individual_1_id: Id,
+    pub individual_2_id: Id,
+    pub relationship_type: RelType,
+    pub individual_1_role: Role,
+}
+
 #[post("/relationships")]
 async fn create_relationship(
     app_state: web::Data<AppState<'_>>,
-    relationship: web::Json<Relationship>,
+    relationship: web::Json<PostRelationBody>,
 ) -> Result<impl Responder, AppError> {
-    let relationship = relationship.into_inner();
+    let r = relationship.into_inner();
+    let relationship = Relationship::new(
+        r.id,
+        r.individual_1_id,
+        r.individual_2_id,
+        r.relationship_type,
+        r.individual_1_role,
+    );
 
     let query_res = app_state
         .context

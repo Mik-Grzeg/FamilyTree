@@ -13,6 +13,16 @@ pub enum Role {
     Sibling,
 }
 
+impl Role {
+    pub fn reverse(role: &Role) -> Role {
+        match role {
+            Role::Parent => Role::Child,
+            Role::Child => Role::Parent,
+            _ => role.clone(),
+        }
+    }
+}
+
 #[derive(sqlx::Type, Deserialize, Serialize, Debug, Clone, Copy)]
 #[sqlx(type_name = "reltype", rename_all = "lowercase")]
 #[serde(rename_all = "lowercase")]
@@ -39,4 +49,23 @@ pub struct Relationships {
     pub relationship_type: RelType,
     pub individual_1_role: Role,
     pub individual_2_role: Role,
+}
+
+impl Relationships {
+    pub fn new(
+        id: Id,
+        individual_1_id: Id,
+        individual_2_id: Id,
+        relationship_type: RelType,
+        role_1_to_2: Role,
+    ) -> Self {
+        Relationships {
+            id,
+            individual_1_id,
+            individual_2_id,
+            relationship_type,
+            individual_2_role: Role::reverse(&role_1_to_2),
+            individual_1_role: role_1_to_2,
+        }
+    }
 }

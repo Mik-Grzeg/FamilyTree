@@ -52,8 +52,7 @@ struct PostIndividualBodyReq {
 
     pub relative: Option<String>,
     pub relation: Option<RelType>,
-    pub role_to_relative: Option<Role>,
-    pub relatives_role: Option<Role>,
+    pub role: Option<Role>,
 }
 
 #[post("")]
@@ -72,21 +71,16 @@ async fn create_individual(
 
     let ind_id = IndividualId { id: query_res };
 
-    if body.relative.is_some()
-        && body.relation.is_some()
-        && body.role_to_relative.is_some()
-        && body.relatives_role.is_some()
-    {
+    if body.relative.is_some() && body.relation.is_some() && body.role.is_some() {
         let relative_id = body.relative.unwrap().parse().unwrap();
 
-        let relation = Relationship {
-            id: None,
-            individual_1_id: Some(ind_id.id),
-            individual_2_id: Some(relative_id),
-            relationship_type: body.relation.unwrap(),
-            individual_1_role: body.role_to_relative.unwrap(),
-            individual_2_role: body.relatives_role.unwrap(),
-        };
+        let relation = Relationship::new(
+            None,
+            Some(ind_id.id),
+            Some(relative_id),
+            body.relation.unwrap(),
+            body.role.unwrap(),
+        );
 
         let query_res = app_state
             .context
