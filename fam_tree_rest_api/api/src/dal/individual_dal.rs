@@ -42,7 +42,7 @@ impl Table<'_, Individual> {
     pub async fn create_individual(&self, individual: &Individual) -> Result<i32, sqlx::Error> {
         let id = sqlx::query(
             r#"
-            INSERT INTO Individuals (names, gender, date_of_birth, date_of_death, hometown, hobbies, job)
+            INSERT INTO individuals (names, gender, date_of_birth, date_of_death, hometown, hobbies, job)
             VALUES ($1, $2, $3, $4, $5, $6, $7)
             RETURNING id"#,
         )

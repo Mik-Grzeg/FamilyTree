@@ -1,3 +1,5 @@
+use std::any;
+
 use actix_web::{error::ResponseError, http::StatusCode, HttpResponse};
 use serde::Serialize;
 use sqlx::Error as SqlError;
@@ -56,6 +58,12 @@ impl From<SqlError> for AppError {
             }
             _ => AppError::NotFound,
         }
+    }
+}
+
+impl From<anyhow::Error> for AppError {
+    fn from(error: anyhow::Error) -> AppError {
+        AppError::Unknown
     }
 }
 
