@@ -64,12 +64,14 @@ async fn create_individual(
     let body = body.into_inner();
     let individual = body.ind;
 
-    let query_res = app_state
+    let res = app_state
         .context
         .individuals
         .create_individual(&individual)
         .await?;
-
+    //.create_individual(&individual)
+    //.await?;
+    let (query_res, transaction) = res;
     let ind_id = IndividualId { id: query_res };
 
     if body.relative.is_some() && body.relation.is_some() && body.role.is_some() {
@@ -101,7 +103,17 @@ async fn create_individual(
             author_username: username.into_inner(),
             root_id: ind_id.id,
         };
-        let family_id = app_state.context.families.create_family(&family).await?;
+        let family_id = match app_state.context.families.create_family(&family).await {
+            Ok(id) => {
+                transaction.commit().await;
+                id
+            }
+            Err(e) => {
+                debug!("{}", e);
+                transaction.rollback().await;
+                return Err(AppError::from(e));
+            }
+        };
 
         app_state
             .context

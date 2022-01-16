@@ -26,6 +26,16 @@ impl AppError {
             Self::Unknown => "Unknown".to_string(),
         }
     }
+
+    pub fn message(code: u16, message: String) -> HttpResponse {
+        let response = ErrorResponse {
+            code,
+            message,
+            error: "true".to_string(),
+        };
+
+        HttpResponse::build(StatusCode::from_u16(code).unwrap()).json(response)
+    }
 }
 
 impl ResponseError for AppError {
