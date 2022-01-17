@@ -85,6 +85,7 @@ async fn create_individual(
             body.role.unwrap(),
         );
 
+        transaction.commit().await;
         let query_res = app_state
             .context
             .relationships
