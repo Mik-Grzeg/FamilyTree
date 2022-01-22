@@ -11,6 +11,7 @@ pub fn init(cfg: &mut web::ServiceConfig) {
     cfg.service(
         web::scope("/individuals")
             .service(get_individuals)
+            .service(get_individual_by_id)
             .service(create_individual)
             .service(edit_individual)
             .service(delete_individual),
@@ -27,6 +28,29 @@ async fn get_individuals(app_state: web::Data<AppState<'_>>) -> Result<HttpRespo
     let individuals = app_state.context.individuals.get_individuals_all().await?;
 
     Ok(HttpResponse::Ok().json(individuals))
+}
+
+#[get("/{id}")]
+async fn get_individual_by_id(
+    id: web::Path<i32>,
+    app_state: web::Data<AppState<'_>>,
+) -> Result<HttpResponse, AppError> {
+    let id = id.into_inner();
+    let individual = app_state.context.individuals.get_individual_by_id(id).await;
+
+    match individual {
+        Ok(ind) => Ok(HttpResponse::Ok().json(ind)),
+        Err(e) => match e {
+            sqlx::Error::RowNotFound => {
+                let err_str = format!("individual with id: {} does not exists in our database", id);
+                Ok(HttpResponse::NotFound().json(serde_json::json!({
+                    "success": false,
+                    "error": err_str
+                })))
+            }
+            _ => Err(AppError::from(e)),
+        },
+    }
 }
 
 #[put("")]
