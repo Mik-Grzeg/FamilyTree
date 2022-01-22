@@ -379,15 +379,19 @@ components:
                 type: string
               job:
                 type: string
-              relative:
-                type: string
-              relation:
-                type: string
-                $ref: "#/components/schemas/RelType"
-              role:
-                type: string
-                $ref: "#/components/schemas/Role"
-
+              relatives:
+                type: array 
+                items:
+                  type: object
+                  properties:
+                    relative: 
+                      type: string
+                    relation: 
+                      type: string
+                      $ref: "#/components/schemas/RelType"
+                    role:
+                      type: string
+                      $ref: "#/components/schemas/Role"
 
 security:
   - BearerAuth: []
