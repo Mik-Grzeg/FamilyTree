@@ -103,7 +103,7 @@ const RelationSelect: FunctionComponent<Props> = ({
             relation: "parent",
           });
         }}
-        disabled={fields.length > 5 || fields.length === peopleData.length}
+        disabled={fields.length === peopleData.length}
       />
     </RelationSelectWrapper>
   );

@@ -46,7 +46,7 @@ interface Props {
 }
 
 const AddPersonModal: FunctionComponent<Props> = ({ close, sourcePerson }) => {
-  const { peopleData } = useTreeContext();
+  const { peopleData, getTree } = useTreeContext();
   const { username } = useUserContext();
 
   const {
@@ -136,30 +136,26 @@ const AddPersonModal: FunctionComponent<Props> = ({ close, sourcePerson }) => {
     if (data.dateOfDeath) person.job = data.job;
 
     //if it's not the tree first person
-    if (data.relations) {
-      person.relations = data.relations.map((r) => ({
+    if (sourcePerson && data.relations) {
+      person.relatives = data.relations.map((r) => ({
         relative:
           peopleData.find((p) => p.fullName.toLocaleLowerCase() === r.name)
             ?.userId ?? "",
         relation: relationToStr(r.relation),
         role: roleToStr(r.relation),
       }));
+    } else person.relatives = [];
+
+    try {
+      const res = await axios.post(`${PERSON_URL}/${username}`, person);
+
+      if (res?.status === 201) {
+        await getTree();
+        if (close) close();
+      }
+    } catch (e) {
+      if (!(e instanceof Error) || !e) return;
     }
-
-    console.log("===");
-    console.log(data);
-    console.log(person);
-
-    // try {
-    //   const res = await axios.post(`${PERSON_URL}/${username}`, person);
-
-    //   if (res?.status === 201) {
-    //     await getTree();
-    //     if (close) close();
-    //   }
-    // } catch (e) {
-    //   if (!(e instanceof Error) || !e) return;
-    // }
   };
 
   return (
