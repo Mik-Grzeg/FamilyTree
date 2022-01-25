@@ -39,6 +39,8 @@ import { useUserContext } from "context/UserContext/useUserContext";
 import { relationToStr } from "utils/functions/relationToStr";
 import { roleToStr } from "utils/functions/roleToStr";
 import { toast } from "react-toastify";
+import { handleErrorMssg } from "utils/functions/handleErrorMssg";
+import { ADD_PERSON_ERROR_TOASTID } from "utils/toast.ids";
 
 interface Props {
   close?: () => void | Promise<void>;
@@ -155,6 +157,8 @@ const AddPersonModal: FunctionComponent<Props> = ({ close, sourcePerson }) => {
       }
     } catch (e) {
       if (!(e instanceof Error) || !e) return;
+
+      handleErrorMssg(e, ADD_PERSON_ERROR_TOASTID);
     }
   };
 
