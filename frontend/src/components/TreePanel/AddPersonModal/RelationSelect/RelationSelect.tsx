@@ -70,6 +70,7 @@ const RelationSelect: FunctionComponent<Props> = ({
             theme="dark"
             options={index === 0 ? [name] : peopleData.map((p) => p.fullName)}
             register={register(`relations.${index}.name`)}
+            title={field.name}
           />
           <RelationSelectIsTile>is</RelationSelectIsTile>
           <Select
